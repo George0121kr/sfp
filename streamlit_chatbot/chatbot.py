@@ -157,6 +157,8 @@ FOOD_DATA = {
     "Soft drink (1 can)": 120,
     "Coconut Water (1 fruit)": 110,
     "Fresh juice (sweetened, 1 glass)": 120,
+    "One Half-Boiled Egg": 77,
+    "Kaya Butter Bread toast": 330, 
 }
 
 # For storing user food input
