@@ -67,12 +67,32 @@ if "gender" not in st.session_state:
 if "activity" not in st.session_state:
     st.session_state.activity = "Sedentary"
 
+def calculate_recommended_calories(gender, activity_level):
+    base_calorie = {
+        "Male": 2500,
+        "Female": 2000,
+        "Other": 2200
+    }.get(gender, 2200)
+
+    activity_factor = {
+        "Sedentary": 1.0,
+        "Moderate": 1.2,
+        "Active": 1.4
+    }.get(activity_level, 1.0)
+
+    return int(base_calorie * activity_factor)
+
 # --- Sidebar for user settings ---
 with st.sidebar:
     st.header("User Profile")
     st.session_state.gender = st.selectbox("Gender", ["Male", "Female", "Other"])
     st.session_state.activity = st.selectbox("Physical Activity Level", ["Sedentary", "Moderate", "Active"])
-    st.session_state.goal = st.slider("Set your daily caloric goal", 1200, 4000, 2000)
+    
+    # Get recommended calories
+    recommended = calculate_recommended_calories(st.session_state.gender, st.session_state.activity)
+    
+    st.session_state.goal = st.slider("Set your daily caloric goal", 1200, 4000, recommended)
+    st.caption(f"Recommended based on your profile: **{recommended} kcal**")
 
 # --- Tabs ---
 tab1, tab2, tab3 = st.tabs(["📊 Calorie Tracker", "🥗 Meal Plan Suggestion", "📈 Summary"])
@@ -100,17 +120,29 @@ with tab1:
 with tab2:
     st.title("Meal Plan Suggestion")
 
-    st.markdown("Here's a sample meal plan based on your goal and activity level:")
-    activity_factor = {"Sedentary": 1.0, "Moderate": 1.2, "Active": 1.4}
-    recommended_intake = int(st.session_state.goal * activity_factor[st.session_state.activity])
+    goal = st.session_state.goal
 
-    st.metric("Adjusted Caloric Need", f"{recommended_intake} kcal")
+    st.markdown(f"Here's a meal plan for a total of **{goal} kcal**, broken into standard meals:")
 
-    st.write("🔹 **Breakfast**: Oatmeal with banana and milk (~400 kcal)")
-    st.write("🔹 **Lunch**: Grilled chicken with rice and broccoli (~700 kcal)")
-    st.write("🔹 **Snack**: Apple and peanut butter (~250 kcal)")
-    st.write("🔹 **Dinner**: Salmon with potato and veggies (~600 kcal)")
-    st.write("🔹 **Yogurt dessert** (~200 kcal)")
+    # Standard meal breakdown (feel free to tweak ratios)
+    meal_distribution = {
+        "Breakfast": 0.25,
+        "Lunch": 0.35,
+        "Dinner": 0.30,
+        "Snacks": 0.10
+    }
+
+    for meal, ratio in meal_distribution.items():
+        kcal = int(goal * ratio)
+        st.subheader(f"{meal}: ~{kcal} kcal")
+        if meal == "Breakfast":
+            st.write("• Oatmeal with banana and milk")
+        elif meal == "Lunch":
+            st.write("• Grilled chicken with rice and vegetables")
+        elif meal == "Dinner":
+            st.write("• Fish or tofu with steamed vegetables and a small portion of rice")
+        elif meal == "Snacks":
+            st.write("• Fruits, yogurt, or a handful of nuts")
 
 # --- Tab 3: Summary Page ---
 with tab3:
