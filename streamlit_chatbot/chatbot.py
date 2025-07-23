@@ -48,7 +48,9 @@ FOOD_DATA = {
     "Kuih Seri Muka (1 piece)": 200,
     "Lemang with Rendang (1 serving)": 600,
     "Popiah Basah (1 roll)": 150,
-    "Chicken Rice": 730,
+    "Chicken Rice (1 plate)": 730,
+    "pasta (cabonara)": 250,
+    "speghetti":220,
 }
 
 # For storing user food input
