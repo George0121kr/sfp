@@ -145,7 +145,7 @@ FOOD_DATA = {
     "Korean Bibimbap (vegetarian)": 500,   
     "Teh Tarik (1 cup)": 83,
     "Milo (sweetened, 1 cup)": 133,
-    "Chinese Tea (unsweetened)": 0,
+    "Chinese Tea (1 Cup)": 5,
     "Air Bandung (rose milk, 1 glass)": 150,
     "Soft drink (1 can)": 120,
     "Coconut Water (1 fruit)": 110,
