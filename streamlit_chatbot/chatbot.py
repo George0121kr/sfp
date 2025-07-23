@@ -223,10 +223,10 @@ with tab1:
             st.success(f"Added {quantity}x {food} to {meal_type}")
 
     with col2:
-        if st.button("🗑️ Delete Last Entry"):
+        if st.button("🗑️ Delete"):
             if st.session_state.food_log:
                 deleted = st.session_state.food_log.pop()
-                st.warning(f"Deleted last entry: {deleted['Food']} ({deleted['Calories']} kcal)")
+                st.warning(f"Deleted: {deleted['Food']} ({deleted['Calories']} kcal)")
             else:
                 st.info("No entries to delete.")
 
