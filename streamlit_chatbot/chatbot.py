@@ -51,7 +51,8 @@ FOOD_DATA = {
     "Chicken Rice (1 plate)": 730,
     "pasta (cabonara)": 250,
     "speghetti":220,
-}
+    "Mixed Rice ( 1 meat, 1 vege, 1 other)": 750,
+    }
 
 # For storing user food input
 if "food_log" not in st.session_state:
