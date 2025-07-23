@@ -127,22 +127,19 @@ with tab2:
     # Standard meal breakdown (feel free to tweak ratios)
     meal_distribution = {
         "Breakfast": 0.25,
-        "Lunch": 0.35,
+        "Lunch": 0.45,
         "Dinner": 0.30,
-        "Snacks": 0.10
     }
 
     for meal, ratio in meal_distribution.items():
         kcal = int(goal * ratio)
         st.subheader(f"{meal}: ~{kcal} kcal")
         if meal == "Breakfast":
-            st.write("• Oatmeal with banana and milk")
+            st.write("• Oatmeal with bread and milk")
         elif meal == "Lunch":
             st.write("• Grilled chicken with rice and vegetables")
         elif meal == "Dinner":
             st.write("• Fish or tofu with steamed vegetables and a small portion of rice")
-        elif meal == "Snacks":
-            st.write("• Fruits, yogurt, or a handful of nuts")
 
 # --- Tab 3: Summary Page ---
 with tab3:
