@@ -158,10 +158,12 @@ FOOD_DATA = {
     "Coconut Water (1 fruit)": 110,
     "Fresh juice (sweetened, 1 glass)": 120,
     "One Half-Boiled Egg": 77,
-    "Kaya Butter Bread toast": 330, 
+    "Kaya Butter Bread toast": 330,
+    "Barley water (1 Cup)": 45,
+    "Chrysanthemum Tea (1 cup)": 35,
 }
 
-# For storing user food input
+# For storing user food input 
 if "food_log" not in st.session_state:
     st.session_state.food_log = []
 
