@@ -221,12 +221,14 @@ with tab2:
     goal = st.session_state.goal
     st.markdown(f"📌 Based on your target of **{goal} kcal/day**, here's a custom daily plan:")
 
-    # Optional Regenerate Button
-    if st.button("🔄 Regenerate Meal Plan"):
-        st.experimental_rerun()
+    # ✅ Only run this when the user clicks the button
+    regenerate = st.button("🔄 Regenerate Meal Plan")
 
     # Generate the plan
-    plan = generate_meal_plan(goal, FOOD_DATA)
+    if regenerate or "meal_plan" not in st.session_state:
+        st.session_state.meal_plan = generate_meal_plan(goal, FOOD_DATA)
+
+    plan = st.session_state.meal_plan
 
     # Display each meal
     for meal_name, meal_data in plan.items():
