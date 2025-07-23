@@ -206,15 +206,34 @@ tab1, tab2, tab3 = st.tabs(["📊 Calorie Tracker", "🥗 Meal Plan Suggestion",
 with tab1:
     st.title("Calorie Tracker")
 
+    # Select meal type (Breakfast, Lunch, Dinner)
+    meal_type = st.selectbox("Meal Type", ["Breakfast", "Lunch", "Dinner"])
+
+    # Select food and quantity
     food = st.selectbox("Select Food", list(FOOD_DATA.keys()))
     quantity = st.number_input("Quantity", 1, 10, 1)
-    if st.button("Add"):
-        st.session_state.food_log.append((food, quantity, FOOD_DATA[food] * quantity))
-        st.success(f"Added {quantity} x {food}")
 
+    # Layout: Add and Delete Buttons side by side
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("➕ Add"):
+            st.session_state.food_log.append(
+                {"Meal": meal_type, "Food": food, "Quantity": quantity, "Calories": FOOD_DATA[food] * quantity}
+            )
+            st.success(f"Added {quantity}x {food} to {meal_type}")
+
+    with col2:
+        if st.button("🗑️ Delete Last Entry"):
+            if st.session_state.food_log:
+                deleted = st.session_state.food_log.pop()
+                st.warning(f"Deleted last entry: {deleted['Food']} ({deleted['Calories']} kcal)")
+            else:
+                st.info("No entries to delete.")
+
+    # Show food log
     st.subheader("Food Log")
     if st.session_state.food_log:
-        df = pd.DataFrame(st.session_state.food_log, columns=["Food", "Quantity", "Calories"])
+        df = pd.DataFrame(st.session_state.food_log)
         st.dataframe(df)
         total_calories = df["Calories"].sum()
         st.metric("Total Calories Consumed", f"{total_calories} kcal")
