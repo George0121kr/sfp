@@ -1,6 +1,14 @@
 import streamlit as st
 import pandas as pd
 
+from your_module import FOOD_CALORIES  # or define in app
+
+food = st.selectbox("Select Food / Dish", list(FOOD_CALORIES.keys()))
+qty = st.number_input("Quantity / Portions", 1, 5, 1)
+if st.button("Add"):
+    cals = FOOD_CALORIES[food] * qty
+    st.session_state.food_log.append((food, qty, cals))
+
 # Sample food database
 FOOD_DATA = {
     "Apple (1 medium)": 95,
