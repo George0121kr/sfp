@@ -1,5 +1,38 @@
 import streamlit as st
 import pandas as pd
+import random
+
+def generate_meal_plan(calorie_goal, food_data):
+    # Distribute calorie target across meals
+    meal_targets = {
+        "Breakfast": int(calorie_goal * 0.25),
+        "Lunch": int(calorie_goal * 0.35),
+        "Dinner": int(calorie_goal * 0.30),
+        "Snacks": int(calorie_goal * 0.10),
+    }
+
+    # Helper to pick foods close to target kcal
+    def pick_foods_for_meal(target, available_foods):
+        selected = []
+        total = 0
+        attempts = 0
+        foods = list(available_foods.items())
+        random.shuffle(foods)
+        while total < target and attempts < 1000:
+            food, kcal = random.choice(foods)
+            if total + kcal <= target:
+                selected.append((food, 1, kcal))
+                total += kcal
+            attempts += 1
+        return selected, total
+
+    # Generate meals
+    meal_plan = {}
+    for meal, target in meal_targets.items():
+        items, total = pick_foods_for_meal(target, food_data)
+        meal_plan[meal] = {"items": items, "total": total}
+
+    return meal_plan
 
 # Sample food database
 FOOD_DATA = {
@@ -187,25 +220,18 @@ with tab2:
     st.title("Meal Plan Suggestion")
 
     goal = st.session_state.goal
+    st.markdown(f"📌 Based on your target of **{goal} kcal/day**, here's a custom daily plan:")
 
-    st.markdown(f"Here's a meal plan for a total of **{goal} kcal**, broken into standard meals:")
+    # Generate the plan
+    plan = generate_meal_plan(goal, FOOD_CALORIES)
 
-    # Standard meal breakdown (feel free to tweak ratios)
-    meal_distribution = {
-        "Breakfast": 0.25,
-        "Lunch": 0.45,
-        "Dinner": 0.30,
-    }
-
-    for meal, ratio in meal_distribution.items():
-        kcal = int(goal * ratio)
-        st.subheader(f"{meal}: ~{kcal} kcal")
-        if meal == "Breakfast":
-            st.write("• Oatmeal with bread and milk")
-        elif meal == "Lunch":
-            st.write("• Grilled chicken with rice and vegetables")
-        elif meal == "Dinner":
-            st.write("• Fish or tofu with steamed vegetables and a small portion of rice")
+    # Display each meal
+    for meal_name, meal_data in plan.items():
+        st.subheader(f"🍽 {meal_name} — {meal_data['total']} kcal")
+        for food_name, qty, kcal in meal_data["items"]:
+            st.markdown(f"- {qty}x {food_name} ({kcal} kcal)")
+if st.button("🔄 Regenerate Meal Plan"):
+    st.experimental_rerun()
 
 # --- Tab 3: Summary Page ---
 with tab3:
