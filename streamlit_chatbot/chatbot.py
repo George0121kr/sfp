@@ -10,25 +10,32 @@ def generate_meal_plan(calorie_goal, food_data):
         "Dinner": int(calorie_goal * 0.30),
     }
 
-    # Helper to pick foods close to target kcal
-    def pick_foods_for_meal(target, available_foods):
+    used_foods = set()  # ✅ Track all used items to avoid duplicates
+
+    def pick_foods_for_meal(target, available_foods, used_foods):
         selected = []
         total = 0
         attempts = 0
-        foods = list(available_foods.items())
+
+        # Filter out already used foods
+        foods = [(food, kcal) for food, kcal in available_foods.items() if food not in used_foods]
         random.shuffle(foods)
-        while total < target and attempts < 1000:
+
+        while total < target and attempts < 1000 and foods:
             food, kcal = random.choice(foods)
             if total + kcal <= target:
                 selected.append((food, 1, kcal))
                 total += kcal
+                used_foods.add(food)  # ✅ Mark as used
+                foods.remove((food, kcal))  # Remove to prevent repeat
             attempts += 1
-        return selected, total
+
+        return selected, total, used_foods
 
     # Generate meals
     meal_plan = {}
     for meal, target in meal_targets.items():
-        items, total = pick_foods_for_meal(target, food_data)
+        items, total, used_foods = pick_foods_for_meal(target, food_data, used_foods)
         meal_plan[meal] = {"items": items, "total": total}
 
     return meal_plan
